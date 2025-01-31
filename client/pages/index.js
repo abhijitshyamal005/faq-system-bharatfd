@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import FAQItem from '../components/FAQItem';
-import LanguageSwitcher from '../components/LanguageSwitcher';
+import LanguageSwitcher from '../components/LanguageSelector'
 
 export default function Home() {
   const [faqs, setFaqs] = useState([]);
@@ -10,16 +10,23 @@ export default function Home() {
   useEffect(() => {
     const fetchFaqs = async () => {
       try {
-        const res = await fetch(`/api/faqs?lang=${lang}`);
+        const res = await fetch(`/api/faqs?lang=${lang}`, {
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        });
+        
+        if (!res.ok) throw new Error('Failed to fetch');
+        
         const data = await res.json();
         setFaqs(data);
       } catch (error) {
-        console.error('Error fetching FAQs:', error);
+        console.error('Fetch error:', error);
       } finally {
         setLoading(false);
       }
     };
-
+  
     fetchFaqs();
   }, [lang]);
 

@@ -4,32 +4,26 @@ services:
   mongo:
     image: mongo:latest
     volumes:
-      - mongo-data:/data/db
+      - mongo_data:/data/db
     environment:
       MONGO_INITDB_DATABASE: faq
-    networks:
-      - faq-network
 
   redis:
     image: redis:alpine
     volumes:
-      - redis-data:/data
-    networks:
-      - faq-network
+      - redis_data:/data
 
   server:
     build: ./server
     ports:
       - "5000:5000"
     environment:
-      - MONGODB_URI=${MONGODB_URI}
+      - MONGODB_URI=mongodb://mongo:27017/faq
       - REDIS_URL=redis://redis:6379
       - GOOGLE_API_KEY=${GOOGLE_API_KEY}
     depends_on:
       - mongo
       - redis
-    networks:
-      - faq-network
 
   client:
     build: ./client
@@ -39,12 +33,7 @@ services:
       - NEXT_PUBLIC_API_URL=http://server:5000/api
     depends_on:
       - server
-    networks:
-      - faq-network
-
-networks:
-  faq-network:
 
 volumes:
-  mongo-data:
-  redis-data:
+  mongo_data:
+  redis_data:
