@@ -1,5 +1,5 @@
 # Clone the repository (if applicable)
-git clone https://github.com/yourusername/faq-system.git
+git clone https://github.com/abhijitshyamal005/faq-system-bharatfd.git
 cd faq-system
 
 # Install dependencies for both backend and frontend
